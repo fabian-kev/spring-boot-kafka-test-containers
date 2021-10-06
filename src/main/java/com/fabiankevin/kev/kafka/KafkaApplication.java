@@ -85,34 +85,34 @@ public class KafkaApplication {
     public NewTopic topic() {
         return TopicBuilder.name("topic").partitions(6).replicas(1).build();
     }
-
-    @Component
-    @RequiredArgsConstructor
-    @Log4j2
-    public static class Producer {
-
-        private final KafkaTemplate<String, String> kafkaTemplate;
-        private final NewTopic topic;
-
-        @EventListener(ApplicationStartedEvent.class)
-        public void produce() {
-            log.info("PROCUDING!!");
-            LongStream.range(0, 10).forEach(i -> {
-                String key = "kafka";
-                String value = key.toUpperCase() + i;
-                System.out.println("PROCUDING "+value);
-                kafkaTemplate.send(topic.name(), key, value).addCallback(result -> {
-                    if (result != null) {
-                        final RecordMetadata recordMetadata = result.getRecordMetadata();
-                        log.info("produced to {}, {}, {}", recordMetadata.topic(), recordMetadata.partition(),
-                                recordMetadata.offset());
-                    }
-                }, ex -> {
-                    log.info("ERRORR {}", ex);
-                });
-
-            });
-            kafkaTemplate.flush();
-        }
-    }
+//
+//    @Component
+//    @RequiredArgsConstructor
+//    @Log4j2
+//    public static class Producer {
+//
+//        private final KafkaTemplate<String, String> kafkaTemplate;
+//        private final NewTopic topic;
+//
+//        @EventListener(ApplicationStartedEvent.class)
+//        public void produce() {
+//            log.info("PROCUDING!!");
+//            LongStream.range(0, 10).forEach(i -> {
+//                String key = "kafka";
+//                String value = key.toUpperCase() + i;
+//                System.out.println("PROCUDING "+value);
+//                kafkaTemplate.send(topic.name(), key, value).addCallback(result -> {
+//                    if (result != null) {
+//                        final RecordMetadata recordMetadata = result.getRecordMetadata();
+//                        log.info("produced to {}, {}, {}", recordMetadata.topic(), recordMetadata.partition(),
+//                                recordMetadata.offset());
+//                    }
+//                }, ex -> {
+//                    log.info("ERRORR {}", ex);
+//                });
+//
+//            });
+//            kafkaTemplate.flush();
+//        }
+//    }
 }
